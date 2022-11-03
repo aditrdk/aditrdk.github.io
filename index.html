@@ -50,61 +50,62 @@
           mode and needed to be connected to a 10k ohm pulldown/pullup resistor.
           <br />
           <br />
-          <code>
-            int led1 = 6;
-            int led2 = 7;
-            int button = 3;
+          <pre>
+            <code>
+              int led1 = 6;
+              int led2 = 7;
+              int button = 3;
 
-            int bVal = 0;
-            int counter = 0;
-            bool pressed = false;
-            bool wasPressed = false;
+              int bVal = 0;
+              int counter = 0;
+              bool pressed = false;
+              bool wasPressed = false;
 
-            void setup() {
-              // put your setup code here, to run once:
-              pinMode(led1, OUTPUT);
-              pinMode(led2, OUTPUT);
-              pinMode(button, INPUT);
+              void setup() {
+                // put your setup code here, to run once:
+                pinMode(led1, OUTPUT);
+                pinMode(led2, OUTPUT);
+                pinMode(button, INPUT);
 
-              Serial.begin(9600);
-            }
-
-            void loop() {
-              // put your main code here, to run repeatedly:
-              bVal = digitalRead(button);
-              Serial.println(bVal);
-              if(bVal > 0)
-              {
-                pressed = true;
+                Serial.begin(9600);
               }
-              else
-              {
-                pressed = false;
-              }
-              if(wasPressed == true && pressed != wasPressed)
-              {
-                counter++;
-                if(counter > 2)
-                  counter = 0;
-                switch(counter)
+
+              void loop() {
+                // put your main code here, to run repeatedly:
+                bVal = digitalRead(button);
+                Serial.println(bVal);
+                if(bVal > 0)
                 {
-                  case 0:
-                  digitalWrite(led1, LOW);
-                  digitalWrite(led2, LOW);
-                  break;
-                  case 1:
-                  digitalWrite(led1, HIGH);
-                  break;
-                  case 2:
-                  digitalWrite(led2, HIGH);
-                  break;
+                  pressed = true;
                 }
+                else
+                {
+                  pressed = false;
+                }
+                if(wasPressed == true && pressed != wasPressed)
+                {
+                  counter++;
+                  if(counter > 2)
+                    counter = 0;
+                  switch(counter)
+                  {
+                    case 0:
+                    digitalWrite(led1, LOW);
+                    digitalWrite(led2, LOW);
+                    break;
+                    case 1:
+                    digitalWrite(led1, HIGH);
+                    break;
+                    case 2:
+                    digitalWrite(led2, HIGH);
+                    break;
+                  }
+                }
+                wasPressed = pressed;
+                delay(10);
               }
-              wasPressed = pressed;
-              delay(10);
-
-            }
-          </code>
+            </code>
+          </pre>
         </div>
         <div class="image-container">
          <iframe width="560" height="315" src="https://www.youtube.com/embed/4eYlWiGNN2c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
