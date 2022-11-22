@@ -34,6 +34,120 @@
       <!-- Copy-paste the post section under an exisiting section to create a new entry -->
       <section class="post">
         <!-- When writing the post title use the format dd.mm.yy Title -->
+        <div class="post-title-date">22.11.22 2 Sensors 1 Cable</div>
+        <div class="text-container">
+          I used a pot and a bend sensor to make weird eyes in processing.
+          
+          Arduino Code:
+          <pre>
+            <code>
+          #include <Wire.h>
+#include <VL53L1X.h>
+
+int pot;
+int bend;
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(115200);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  pot = analogRead(A3);
+  bend = analogRead(A2);
+  Serial.print(pot);
+  Serial.print(',');
+  Serial.println(bend);
+  delay(20);
+}
+
+            </code>
+          </pre>
+          
+          Processing Code:
+          <pre>
+            <code>
+import processing.serial.*;
+
+Serial myPort;  // Create object from Serial class
+String str;      // Data received from the serial port
+float pot;
+float bend;
+float c = 10;
+float s=10;
+void setup()
+{
+  size(800, 600);
+  // Open whatever port is the one you're using.
+  // Change the 0 in  Serial.list()[0] to the correct device
+  String[] ports = Serial.list();
+  printArray(ports);
+  String portName = ports[ports.length-1];
+  myPort = new Serial(this, portName, 115200);
+}
+
+void draw()
+{
+  
+  if ( myPort.available() > 0) {  // If data is available,
+    str = myPort.readStringUntil('\n');         // read it and store it in str
+    if(str != null){
+      String[] splitData = split(str, ",");
+      if(splitData.length >= 2)
+      {    
+        pot = float(splitData[0]);
+        bend = float(splitData[1]);
+        c = map(pot,500,1023,10,20);
+        s = map(bend,200,450,0,4);
+      }
+    }
+    background(255);   
+  fill(255);
+  int count = (int)c;
+  int handle = 4;
+  int handleX = 10;
+  int eyeWidth = (width/count);
+  int eyeHeight = (height/count);
+  float openness = -s;
+  handle = handle + (int)openness;
+  for(int i = 0; i < count+1; i++)
+  {
+    for(int j = 0; j < count; j++)
+    {
+      int sizeX = eyeWidth;
+      int sizeY = eyeHeight;
+      int offset = -((j%2)*eyeWidth/2);
+      
+      fill(255);
+      
+      curve(sizeX*i+offset-handleX,       sizeY*(j-handle)+(eyeHeight/2), 
+            sizeX*i+offset,               sizeY*j+(eyeHeight/2), 
+            sizeX*(i+1)+offset,           sizeY*j+(eyeHeight/2), 
+            sizeX*(i+1)+offset+handleX,   sizeY*(j-handle)+(eyeHeight/2));
+            
+      curve(sizeX*i+offset-handleX,       sizeY*(j+handle)+(eyeHeight/2), 
+            sizeX*i+offset,               sizeY*j+(eyeHeight/2), 
+            sizeX*(i+1)+offset,           sizeY*j+(eyeHeight/2), 
+            sizeX*(i+1)+offset+handleX,   sizeY*(j+handle)+(eyeHeight/2));
+            
+      fill(0);
+      
+      circle(sizeX*i+offset+(sizeX/2), sizeY*j+(eyeHeight/2), count);
+    }
+     
+  } 
+  } 
+}
+            </code>
+          </pre>
+        </div>
+        <div class="image-container">
+         <iframe width="560" height="315" src="https://www.youtube.com/embed/KYVlW6OTtxI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </section> 
+      <section class="post">
+        <!-- When writing the post title use the format dd.mm.yy Title -->
         <div class="post-title-date">14.11.22 Idea pitch</div>
         <div class="text-container">
         </div>
